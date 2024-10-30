@@ -11,7 +11,7 @@ class FIFOCache(BaseCaching):
     FIFO eviction policy class implementation that inherits
     from BaseCaching
     """
-    
+
     def __init__(self):
         """
         Initialises the class and its super class
@@ -26,7 +26,7 @@ class FIFOCache(BaseCaching):
             return
         if self.cache_data.__len__() == self.MAX_ITEMS:
             for first_key in self.cache_data.keys():
-                print (f"DISCARD: {first_key}")
+                print(f"DISCARD: {first_key}")
                 del self.cache_data[first_key]
                 break
         self.cache_data[key] = item
