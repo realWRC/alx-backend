@@ -3,9 +3,11 @@
 Basic Hello world flask app
 """
 
+import pytz
 from flask import Flask, render_template, request, g
 from flask_babel import Babel
 from typing import Dict, Optional
+from pytz.exceptions import UnknownTimeZoneError
 
 
 class Config:
@@ -57,13 +59,45 @@ def get_locale():
     locale = request.args.get('locale')
     if locale and locale in app.config['LANGUAGES']:
         return locale
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+    if g.get('user'):
+        user_locale = g.user.get('locale')
+        if user_locale and user_locale in app.config['LANGUAGES']:
+            return user_locale
+
+    return request.accept_languages.best_match(
+        app.config['LANGUAGES']
+    )
+
+
+@babel.timezoneselector
+def get_timezone():
+    """Determine the appropriate time zone."""
+    timezone = request.args.get('timezone')
+    if timezone:
+        try:
+            pytz.timezone(timezone)
+            return timezone
+        except UnknownTimeZoneError:
+            pass
+
+    user = getattr(g, 'user', None)
+    if user:
+        user_timezone = user.get('timezone')
+        if user_timezone:
+            try:
+                pytz.timezone(user_timezone)
+                return user_timezone
+            except UnknownTimeZoneError:
+                pass
+
+    return app.config['BABEL_DEFAULT_TIMEZONE']
 
 
 @app.route('/')
 def index():
     """Route for the index page"""
-    return render_template('5-index.html')
+    return render_template('7-index.html')
 
 
 if __name__ == '__main__':
