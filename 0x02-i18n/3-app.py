@@ -3,7 +3,7 @@
 Basic Hello world flask app
 """
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, g
 from flask_babel import Babel
 
 class Config:
