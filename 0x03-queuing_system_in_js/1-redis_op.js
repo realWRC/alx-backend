@@ -19,8 +19,8 @@ function setNewSchool(schoolName, value) {
 function displaySchoolValue(schoolName) {
   client.get(schoolName, (err, result) => {
     if (err) {
-      console.log(error);
-      throw error;
+      console.log(err);
+      throw err;
     }
     console.log(result);
   });
@@ -29,5 +29,3 @@ function displaySchoolValue(schoolName) {
 displaySchoolValue('Holberton');
 setNewSchool('HolbertonSanFrancisco', '100');
 displaySchoolValue('HolbertonSanFrancisco');
-
-client.quit();
